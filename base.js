@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 02:17:08
+* @Last Modified time: 2019-12-03 09:43:18
 *
 * Base Code for Serverless Old Tieba
 */
@@ -34,7 +34,8 @@ const MEMBER_NAME = "\u4F1A\u5458";
 
 const BAR_FILE = "bar.html";
 const POST_FILE = "post.html";
-const POST_BANNER_IMAGE_COUNT = 40;
+
+const POST_BANNER_IMAGE_COUNT = 50;
 
 const SCORE_DELTA_TOPIC = 5;
 const SCORE_DELTA_REPLY = 3;
