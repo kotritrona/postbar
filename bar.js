@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 00:43:24
+* @Last Modified time: 2019-12-03 02:29:50
 *
 * Base Code for Serverless Old Tieba
 */
@@ -33,7 +33,7 @@ let gTopicsData = {
 };
 
 function getPostLink(number) {
-    return "post.html?n=" + number;
+    return "post.html?kz=" + number;
 }
 
 function getTopicLabels(labels) {
