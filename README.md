@@ -24,7 +24,7 @@
 - 在issues里面加一条红色的标签，名为digest
 - 用[graphQL explorer](https://developer.github.com/v4/explorer/)跑一下下面这个查询，会给出repo ID和label ID （当然owner和name填你的）
 
-```json
+```text
 query {
   repository(owner:"kotritrona", name:"postbar") {
     forkCount,
