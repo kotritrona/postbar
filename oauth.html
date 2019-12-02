@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en-x-pirate">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>OAuth2 Application</title>
+	<script src="base.js" type="text/javascript" language="javascript"></script>
+</head>
+
+<body>
+
+</body>
+<script>
+	// We can get the request token from the "code" query
+	// Luckily it is not a POST or this method will fail
+	const query = window.location.search.substring(1);
+	const requestToken = query.split('code=')[1];
+
+	const clientID = CLIENT_ID;
+	const clientSecret = CLIENT_SECRET;
+
+	// Since the authorization API does not CORS, we have to use a CORS proxy here
+	// Otherwise it is possible to just create an application on Heroku like cors-anywhere did
+	// which can also prevent clientSecret from being leaked
+	//
+	fetch(`https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${requestToken}`, {
+			method: "POST",
+		    headers: {
+		      accept: 'application/json',
+		      "X-Requested-With" : "TestGithubOauthApp" // this is required by cors-anywhere.herokuapp
+		    }
+		})
+		// Parse the response as JSON
+		.then(res => res.json())
+		.then(res => {
+			// Once we get the response (which has many fields)
+			// Documented here: https://developer.github.com/v3/users/#get-the-authenticated-user
+			// Write "Welcome <user name>" to the documents body
+			const accessToken = res.access_token;
+			if(!accessToken) {
+				const nameNode = document.createElement("pre");
+				nameNode.textContent = `Error: ${JSON.stringify(res, null, 2)}`;
+				document.body.appendChild(nameNode);
+			}
+			else {
+				location.replace(`bar.html?access_token=${accessToken}`);
+			}
+		})
+</script>
+
+</html>

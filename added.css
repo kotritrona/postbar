@@ -1,0 +1,42 @@
+template {
+    display: none;
+}
+.topic-item:nth-child(even) tr {
+    background-color:#eee;
+}
+.editor_users_unloggedin {
+    line-height: 2.7em;
+}
+.login_here {
+    font-weight: bold;
+    cursor: pointer;
+}
+#com_userbar_unloggedin {
+    position: absolute;
+    font-family: Arial, ËÎÌå;
+    _zoom: 1;
+    right: 0;
+    top: 2px;
+    top: 4px\9;
+    padding: 0 10px;
+    z-index: 210;
+    font-size: 12px;
+    text-align: left;
+}
+#com_userbar_unloggedin ul {
+    display: block;
+    overflow: hidden;
+}
+#com_userbar_unloggedin ul li {
+    float: left;
+    padding: 0;
+    margin: 0 0 0 6px;
+    line-height: 18px;
+    list-style: none;
+}
+.subbtn_bg:disabled {
+    background-position: 0 100% !important;
+}
+.topic-label-red {
+    color: red;
+}
