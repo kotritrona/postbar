@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 01:05:17
+* @Last Modified time: 2019-12-03 01:19:02
 *
 * Base Code for Serverless Old Tieba
 */
@@ -119,19 +119,27 @@ function parseSearchParams() {
     return paramsToObject(params);
 }
 
-/* */
+
+/*
+ *  Returns a request URL for Github Apps based on given client ID, app scope and redirect URI.
+ *
+ *  @returns    url : string
+ */
 function getGithubLoginURL() {
     return `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=${APP_SCOPE}&redirect_uri=${REDIRECT_URI}`;
 }
 
+// TODO fix the level thresholds
 const EXP_LEVELS = [-999999,   0,         10,     25,      50,       80,       150,    300,    500,     1000,     2000,     3000,    4500, 6000,   7500,     9000,    11000,   14000,    18000, 24000,36000, 48000, 64000,100000,   200000, 300000,   400000,500000];
 const EXP_TITLES = ["Tutorial","Beginner","Easy","Normal","Standard","Advanced","Hard","Hyper","Insane","Lunatic","Another","Extra","Solo","Remix","Extreme","Hentai","Jumping","Stream","Tag2","233","Tag4","Yuka","NTR","Eggpain","MyArt","Timing","L2857","moemoe"];
 const EXP_BADGE_LEVELS = [-1,0,6,10,14];
 
+/* Saves the score in local storage */
 function saveScore() {
     localStorage.setItem("PostbarScore", gUserData.score);
 }
 
+/* Loads the score from local storage */
 function loadScore() {
     const storedUserScore = parseInt(localStorage.getItem("PostbarScore"), 10);
     if(isFinite(storedUserScore)) {
@@ -142,6 +150,12 @@ function loadScore() {
     return 0;
 }
 
+/*
+ * Add the score by a delta amount and saves it in local storage
+ *
+ *  @param delta : number
+ *
+ */
 function updateScore(delta) {
     if(delta) {
         gUserData.score += delta;
@@ -150,6 +164,11 @@ function updateScore(delta) {
     saveScore();
 }
 
+/*
+ * Set score to a specific amount, and displays on the UI including the related level, remaining-score and images. Saving is not included
+ *
+ *  @param xp : number
+ */
 function updateScoreWith(xp)
 {
     let lvl = 0;
@@ -196,6 +215,13 @@ function updateScoreWith(xp)
     }
 }
 
+/*
+ * Inserts a snippet of text to the textarea element
+ *
+ *  @param ci : string : selector of textarea
+ *  @param l : string : added text
+ *  @param r : bool/string : true if replace the current selection, string for content added after selection and not replace
+ */
 function insertContentToTextarea(ci, l, r) {
     var c = $Q(ci);
     r = r || "";
@@ -223,11 +249,29 @@ function insertContentToTextarea(ci, l, r) {
     }
 }
 
+/*
+ * Unbound event handler for adding emotion images
+ *
+ *  @param targetSelector : string : selector of target textarea
+ *  @param emoteURL : string : image URL
+ *  @param evt : unused
+ */
 function unboundEvtAddEmote(targetSelector, emoteURL, evt) {
     insertContentToTextarea(targetSelector, "![](" + emoteURL + ")", true);
     return false;
 }
 
+/*
+ * Generate list of emotion images in a container
+ * The image file names and preview image is hardcoded, if willing to replace the images you can use an array
+ * const arrayOfImages = [...URL]
+ * let t = arrayOfImages[i]
+ * ele.style.background = `url(${t}) 0 0`
+ *
+ *  @param emotionBarSelector : string : selector of container for selecting images
+ *  @param targetSelector : string : selector of target textarea
+ *
+ */
 function generateEmotions(emotionBarSelector, targetSelector) {
     let emotionBar = $Q(emotionBarSelector);
     targetSelector = targetSelector || "#textInput";
@@ -239,7 +283,7 @@ function generateEmotions(emotionBarSelector, targetSelector) {
         ele.style.display = "inline-block";
         ele.style.height = "35px";
         ele.style.width = "35px";
-        ele.style.background = `url("${EMOTE_DIR}bprev.gif") 0px -${ 35 * (i-1) }px`;
+        ele.style.background = `url("${EMOTE_DIR}bprev.gif") 0 -${ 35 * (i-1) }px`;
         ele.style.margin = "5px";
         ele.style.cursor = "pointer";
         ele.animate = "false";
