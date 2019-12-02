@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 00:47:43
+* @Last Modified time: 2019-12-03 01:05:17
 *
 * Base Code for Serverless Old Tieba
 */
@@ -15,18 +15,18 @@ const githubAPI = '//api.github.com/graphql';
 const githubUserLoginAPI = '//api.github.com/user';
 
 const REPO_OWNER = "kotritrona";
-const REPO_NAME = "jump2048";
-const REPO_ID = "MDEwOlJlcG9zaXRvcnkxMjA0NjA4OTk=";
+const REPO_NAME = "postbar";
+const REPO_ID = "MDEwOlJlcG9zaXRvcnkyMjUzODYxMzI=";
 
-const LABEL_DIGEST = "homura";
-const DIGEST_LABEL_ID = "MDU6TGFiZWw4Mjg3Mzk2NzU=";
+const LABEL_DIGEST = "digest";
+const DIGEST_LABEL_ID = "MDU6TGFiZWwxNzEwMDM0OTcx";
 
 const CLIENT_ID = "8c6cd13deb1270c3bf8c";
 const CLIENT_SECRET = "f52ce7a9441822d1958c275aa874a747b8bcc7c9";
 const APP_SCOPE = "public_repo";
 
-const REDIRECT_URI = "http://127.0.0.1/httools/graphQL_tb/oauth.html";
-const EMOTE_DIR = "em/";
+const REDIRECT_URI = "https://kotritrona.github.io/postbar/oauth.html";
+const EMOTE_DIR = "https://kotritrona.github.io/postbar/em/";
 
 const BAR_NAME = "Kotri_Lv.216";
 const MEMBER_NAME = "\u4F1A\u5458";
