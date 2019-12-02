@@ -17,12 +17,29 @@
 - 用Github GraphQL API获得相关贴子和回复
 - 甚至可以实现加精置顶，虽然我还没实现置顶的功能
 
-### Deployment
+### 安装流程
 
 - 在Github选项里进入最后一项（Developer settings）
 - 注册一个OAuth App和一个personal access token（什么权限也不用点）
 - 在issues里面加一条红色的标签，名为digest
-- 用graphQL explorer跑一下下面这个查询，会给出repo ID和label ID
+- 用[graphQL explorer](https://developer.github.com/v4/explorer/)跑一下下面这个查询，会给出repo ID和label ID （当然owner和name填你的）
+
+```json
+query {
+  repository(owner:"kotritrona", name:"postbar") {
+    forkCount,
+    id,
+    stargazers {
+      totalCount
+    },
+    label(name:"digest") {
+      name,
+      id
+    }
+  }
+}
+```
+
 - 在base.js最前面把相关的变量改成你的
 - 发布到github pages
 

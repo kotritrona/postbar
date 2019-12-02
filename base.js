@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 01:19:02
+* @Last Modified time: 2019-12-03 02:17:08
 *
 * Base Code for Serverless Old Tieba
 */
@@ -24,6 +24,7 @@ const DIGEST_LABEL_ID = "MDU6TGFiZWwxNzEwMDM0OTcx";
 const CLIENT_ID = "8c6cd13deb1270c3bf8c";
 const CLIENT_SECRET = "f52ce7a9441822d1958c275aa874a747b8bcc7c9";
 const APP_SCOPE = "public_repo";
+const DEFAULT_ACCESS_TOKEN = "c0a78e5a81a128158ca5025360da13d447002875";
 
 const REDIRECT_URI = "https://kotritrona.github.io/postbar/oauth.html";
 const EMOTE_DIR = "https://kotritrona.github.io/postbar/em/";
@@ -38,10 +39,15 @@ const POST_BANNER_IMAGE_COUNT = 40;
 const SCORE_DELTA_TOPIC = 5;
 const SCORE_DELTA_REPLY = 3;
 
+// TODO fix the level thresholds
+const EXP_LEVELS = [-999999, 0, 5, 15, 30, 50, 100, 200, 500, 1000, 2000, 3000, 6000, 10000, 18000, 30000, 60000, 100000, 300000];
+const EXP_TITLES = ["\u65e0", "\u521d\u7ea7\u7c89\u4e1d", "\u4e2d\u7ea7\u7c89\u4e1d", "\u9ad8\u7ea7\u7c89\u4e1d", "\u5165\u95e8\u4f1a\u5458", "\u6b63\u5f0f\u4f1a\u5458", "\u6838\u5fc3\u4f1a\u5458", "\u6838\u5fc3\u4f1a\u5458", "\u94c1\u6746\u4f1a\u5458", "\u94c1\u6746\u4f1a\u5458", "\u77e5\u540d\u4eba\u58eb", "\u77e5\u540d\u4eba\u58eb", "\u4eba\u6c14\u6977\u6a21", "\u4eba\u6c14\u6977\u6a21", "\u610f\u89c1\u9886\u8896", "\u610f\u89c1\u9886\u8896", "\u8fdb\u9636\u5143\u8001", "\u8d44\u6df1\u5143\u8001", "\u8363\u8000\u5143\u8001"];
+const EXP_BADGE_LEVELS = [-1,0,6,10,14];
+
 /* global variables */
 let gUserData = {
     loggedIn : false,
-    accessToken : "c0a78e5a81a128158ca5025360da13d447002875",
+    accessToken : DEFAULT_ACCESS_TOKEN,
     nodeID : "",
     login : "",
     avatarUrl : "",
@@ -128,11 +134,6 @@ function parseSearchParams() {
 function getGithubLoginURL() {
     return `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=${APP_SCOPE}&redirect_uri=${REDIRECT_URI}`;
 }
-
-// TODO fix the level thresholds
-const EXP_LEVELS = [-999999,   0,         10,     25,      50,       80,       150,    300,    500,     1000,     2000,     3000,    4500, 6000,   7500,     9000,    11000,   14000,    18000, 24000,36000, 48000, 64000,100000,   200000, 300000,   400000,500000];
-const EXP_TITLES = ["Tutorial","Beginner","Easy","Normal","Standard","Advanced","Hard","Hyper","Insane","Lunatic","Another","Extra","Solo","Remix","Extreme","Hentai","Jumping","Stream","Tag2","233","Tag4","Yuka","NTR","Eggpain","MyArt","Timing","L2857","moemoe"];
-const EXP_BADGE_LEVELS = [-1,0,6,10,14];
 
 /* Saves the score in local storage */
 function saveScore() {
