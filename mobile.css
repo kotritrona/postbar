@@ -1,0 +1,144 @@
+@media screen and (max-width: 480px) {
+    #balv_mod, #forumInfoPanel, #zyq, #j_frs_gamezone,
+    span.s_tools,
+    .thread_list_table tr > th:first-child,
+    #post_insert_here tr > td:first-child,
+    .thread_list_table tr > th:nth-child(4),
+    #post_insert_here tr > td:nth-child(4),
+    #refresh,
+    #com_userbar ul > li:nth-child(4),
+    #com_userbar ul > li:nth-child(5),
+    #com_userbar ul > li:nth-child(6),
+    #com_userbar ul > li:nth-child(7),
+    #com_userbar ul > li:nth-child(12),
+    #com_userbar ul > li:nth-child(13),
+    #footer > span:nth-child(5),
+    #footer > a:nth-child(6),
+    #h123_mod,
+    #cproshow,
+    ul.tieba_notice,
+    .l_thread_info,
+    .p_adminlist,
+    .editor_theme_1 tr > td:first-child {
+        display: none !important;
+    }
+    .hdtag {
+        max-width: calc(100vw - 160px);
+        overflow: hidden;
+        overflow-x: auto;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0 -150px 0 0;
+        padding: 0;
+    }
+    .thread_list_table tr > th:nth-child(5),
+    #post_insert_here tr > td:nth-child(5) {
+        max-width: 125px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .nav_left > li:nth-child(4),
+    .nav_left > li:nth-child(5) {
+        display: none;
+    }
+    #container {
+        padding: 0;
+    }
+    #editor {
+        padding: 5px;
+        margin: 0;
+        width: calc(100% - 10px);
+    }
+    #create_topic_content, #create_topic_title {
+        width: calc(100vw - 75px) !important;
+    }
+    .frs_simple_editor .new_tiezi_tip {
+        width: 50vw;
+    }
+    .frs_simple_editor {
+    }
+    #head {
+        margin: 10px 0 10px 0;
+        padding: 0 2px 0 2px;
+        width: calc(100% - 4px);
+        max-width: calc(100% - 4px);
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    #wd1 {
+        width: calc(100vw - 125px) !important;
+        max-width: 50%;
+    }
+    .contet_wrap {
+        margin-right: 0;
+        margin-left: 0;
+    }
+    #edit_parent {
+        margin-bottom: 10px;
+    }
+    #extraPositioner1, #extraPositioner2 {
+        position: relative;
+        top: 0;
+        left: 0;
+        margin-left: 50px;
+        width: auto;
+        padding: 0;
+        margin-right: 0;
+    }
+    #extraPositioner2 {
+        margin-left: 10px;
+    }
+    #emoticonBar1, #emoticonBar2 {
+        width: 270px;
+    }
+    #footer {
+        margin-top: 240px;
+    }
+    body {
+    }
+    #topic_pages {
+        margin-left: 0;
+        margin-right: 0;
+        width: auto;
+        left: 50%;
+        right: auto;
+        transform: translate(-50%,0);
+    }
+    .pager-center {
+    }
+    .pager-center span, .pager-center a{
+        left: 0;
+    }
+    #tb_top_ad {
+        margin-left: calc(50vw - 50%);
+        overflow: hidden;
+    }
+    div.l_banner {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+    .p_postlist {
+        width: 100%;
+    }
+    #textInput {
+        width: calc(100vw - 50px) !important;
+    }
+    #post_container > table {
+        display: none;
+    }
+    #post_container > .l_core {
+        margin-top: 10px;
+    }
+    #loginboard {
+        right: calc(50vw - 160px) !important;
+    }
+    #leaderboard {
+        transform: scale(0.6);
+        transform-origin: 50% 50%;
+        margin-left: -20%;
+        margin-right: 0;
+    }
+}

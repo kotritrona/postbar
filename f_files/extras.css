@@ -65,3 +65,6 @@
 #emoticonBar1{position:absolute;background:white;top:0px;left:0px;display:block;border:1px solid #CCCCCC;width:245px;height:220px;overflow-y:scroll}
 #emoticonBar2{position:absolute;background:white;top:0px;left:0px;display:block;border:1px solid #CCCCCC;width:245px;height:220px;overflow-y:scroll}
 #footer{margin-top:60px}
+.l_aside{float:left;width:217px;margin:0 0 0 -217px;display:block;zoom:1;}
+.contet_wrap{margin-right:228px;}
+.frs_content{float:left;width:100%;}
