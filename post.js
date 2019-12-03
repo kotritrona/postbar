@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 02:39:33
+* @Last Modified time: 2019-12-03 14:10:11
 *
 * Base Code for Serverless Old Tieba
 */
@@ -377,6 +377,13 @@ function attachNewReplyEvent() {
         if($Q("#textInput").value == "") {
             return;
         }
+
+        // If user is not logged in, redirect to login page
+        if(!gUserData.loggedIn) {
+            $Q(".login_here").click();
+            return;
+        }
+
         $Q(".subbtn_bg").disabled = true;
         submitNewReply($Q("#textInput").value).then(result => {
             $Q(".subbtn_bg").disabled = false;
