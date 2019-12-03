@@ -44,8 +44,3 @@ query {
 
 - 在base.js最前面把相关的变量改成你的信息
 - 发布到github pages
-
-### todo:
-
-简单改个手机版的css出来，方便在手机上水贴
-像discourse那样排版就好了
