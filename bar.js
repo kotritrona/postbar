@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 14:09:55
+* @Last Modified time: 2019-12-03 20:03:39
 *
 * Base Code for Serverless Old Tieba
 */
@@ -33,7 +33,7 @@ let gTopicsData = {
 };
 
 function getPostLink(number) {
-    return "post.html?kz=" + number;
+    return POST_FILE + "?kz=" + number;
 }
 
 function getTopicLabels(labels) {
@@ -202,7 +202,7 @@ function attachLoginMechanism() { // must be a link!! not a button or something
 }
 
 function saveUserData() {
-    localStorage.setItem("PostbarUser", JSON.stringify({
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
         accessToken: gUserData.accessToken,
         login: gUserData.login,
         nodeID: gUserData.nodeID,
@@ -218,7 +218,7 @@ function loadUserData() {
         return loginUsingToken(searchParams.access_token);
     }
     else {
-        const storedUserJSON = localStorage.getItem("PostbarUser");
+        const storedUserJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
         if(storedUserJSON) {
             const storedUser = JSON.parse(storedUserJSON);
             gUserData.accessToken = storedUser.accessToken;

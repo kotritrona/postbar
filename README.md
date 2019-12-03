@@ -19,10 +19,12 @@
 
 ### 安装流程
 
+- Fork本代码库后，在settings里面把issues打开
 - 在Github选项里进入最后一项（Developer settings）
-- 注册一个OAuth App和一个personal access token（什么权限也不用点）
-- 在issues里面加一条红色的标签，名为digest
-- 用[graphQL explorer](https://developer.github.com/v4/explorer/)跑一下下面这个查询，会给出repo ID和label ID （当然owner和name填你的）
+- 注册一个OAuth App，里面的Redirect URI填你的发布地址/oauth.html，得到client key和secret
+- 注册一个personal access token，在刚才OAuth App下面的地方，什么权限也不用点
+- 在issues里面新建一条红色的标签，名为digest
+- 用[graphQL explorer](https://developer.github.com/v4/explorer/)跑一遍下面这个查询，会给出repo ID和label ID （当然owner和name填你的）
 
 ```text
 query {
@@ -40,7 +42,7 @@ query {
 }
 ```
 
-- 在base.js最前面把相关的变量改成你的
+- 在base.js最前面把相关的变量改成你的信息
 - 发布到github pages
 
 ### todo:

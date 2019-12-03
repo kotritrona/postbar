@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 14:10:11
+* @Last Modified time: 2019-12-03 20:06:34
 *
 * Base Code for Serverless Old Tieba
 */
@@ -157,6 +157,8 @@ function updateMetadataUser() {
         $A(".username_value").forEach(item => item.value = gUserData.login);
         $A(".user_ava").forEach(item => item.src = gUserData.avatarUrl);
     }
+
+    $A(".bar_url").forEach(item => item.href = BAR_FILE);
 }
 
 function showPostsAdBar() {
@@ -172,7 +174,7 @@ function attachLoginMechanism() { // must be a link!! not a button or something
 }
 
 function saveUserData() {
-    localStorage.setItem("PostbarUser", JSON.stringify({
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
         accessToken: gUserData.accessToken,
         login: gUserData.login,
         nodeID: gUserData.nodeID,
@@ -183,7 +185,7 @@ function saveUserData() {
 
 /* returns promise */
 function loadUserData() {
-    const storedUserJSON = localStorage.getItem("PostbarUser");
+    const storedUserJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
     if(storedUserJSON) {
         const storedUser = JSON.parse(storedUserJSON);
         gUserData.accessToken = storedUser.accessToken;

@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 09:43:18
+* @Last Modified time: 2019-12-03 20:02:54
 *
 * Base Code for Serverless Old Tieba
 */
@@ -44,6 +44,8 @@ const SCORE_DELTA_REPLY = 3;
 const EXP_LEVELS = [-999999, 0, 5, 15, 30, 50, 100, 200, 500, 1000, 2000, 3000, 6000, 10000, 18000, 30000, 60000, 100000, 300000];
 const EXP_TITLES = ["\u65e0", "\u521d\u7ea7\u7c89\u4e1d", "\u4e2d\u7ea7\u7c89\u4e1d", "\u9ad8\u7ea7\u7c89\u4e1d", "\u5165\u95e8\u4f1a\u5458", "\u6b63\u5f0f\u4f1a\u5458", "\u6838\u5fc3\u4f1a\u5458", "\u6838\u5fc3\u4f1a\u5458", "\u94c1\u6746\u4f1a\u5458", "\u94c1\u6746\u4f1a\u5458", "\u77e5\u540d\u4eba\u58eb", "\u77e5\u540d\u4eba\u58eb", "\u4eba\u6c14\u6977\u6a21", "\u4eba\u6c14\u6977\u6a21", "\u610f\u89c1\u9886\u8896", "\u610f\u89c1\u9886\u8896", "\u8fdb\u9636\u5143\u8001", "\u8d44\u6df1\u5143\u8001", "\u8363\u8000\u5143\u8001"];
 const EXP_BADGE_LEVELS = [-1,0,6,10,14];
+
+const LOCAL_STORAGE_KEY = "PostbarUser";
 
 /* global variables */
 let gUserData = {
