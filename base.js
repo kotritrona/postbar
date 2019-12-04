@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 20:02:54
+* @Last Modified time: 2019-12-04 22:56:19
 *
 * Base Code for Serverless Old Tieba
 */
@@ -14,9 +14,9 @@
 const githubAPI = '//api.github.com/graphql';
 const githubUserLoginAPI = '//api.github.com/user';
 
-const REPO_OWNER = "kotritrona";
-const REPO_NAME = "postbar";
-const REPO_ID = "MDEwOlJlcG9zaXRvcnkyMjUzODYxMzI=";
+const DEFAULT_REPO_OWNER = "kotritrona";
+const DEFAULT_REPO_NAME = "postbar";
+const DEFAULT_REPO_ID = "MDEwOlJlcG9zaXRvcnkyMjUzODYxMzI=";
 
 const LABEL_DIGEST = "digest";
 const DIGEST_LABEL_ID = "MDU6TGFiZWwxNzEwMDM0OTcx";
@@ -29,11 +29,14 @@ const DEFAULT_ACCESS_TOKEN = "c0a78e5a81a128158ca5025360da13d447002875";
 const REDIRECT_URI = "https://kotritrona.github.io/postbar/oauth.html";
 const EMOTE_DIR = "https://kotritrona.github.io/postbar/em/";
 
-const BAR_NAME = "Kotri_Lv.216";
+const DEFAULT_BAR_NAME = "Kotri_Lv.216";
 const MEMBER_NAME = "\u4F1A\u5458";
 
 const BAR_FILE = "bar.html";
 const POST_FILE = "post.html";
+
+const ANONYMOUS = "\u533F\u540D";
+const ANONYMOUS_URL = "#anonymous";
 
 const POST_BANNER_IMAGE_COUNT = 50;
 
@@ -55,6 +58,13 @@ let gUserData = {
     login : "",
     avatarUrl : "",
     score : 0
+};
+
+let gRepo = {
+    id : DEFAULT_REPO_ID,
+    name : DEFAULT_REPO_NAME,
+    owner : DEFAULT_REPO_OWNER,
+    bar : DEFAULT_BAR_NAME
 };
 
 /*

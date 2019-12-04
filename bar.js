@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 20:03:39
+* @Last Modified time: 2019-12-04 23:02:57
 *
 * Base Code for Serverless Old Tieba
 */
@@ -33,7 +33,31 @@ let gTopicsData = {
 };
 
 function getPostLink(number) {
-    return POST_FILE + "?kz=" + number;
+    if(gRepo.owner == DEFAULT_REPO_OWNER && gRepo.name == DEFAULT_REPO_NAME) {
+        return POST_FILE + "?kz=" + number;
+    }
+    else {
+        let kw = encodeURIComponent(gRepo.owner + "/" + gRepo.name);
+        return POST_FILE + "?kz=" + number + "&kw=" + kw;
+    }
+}
+
+function getBarName() {
+    return gRepo.bar;
+}
+
+function getBarURL() {
+    if(gRepo.owner == DEFAULT_REPO_OWNER && gRepo.name == DEFAULT_REPO_NAME) {
+        return BAR_FILE;
+    }
+    else {
+        let kw = encodeURIComponent(gRepo.owner + "/" + gRepo.name);
+        return BAR_FILE + `?kw=${kw}`;
+    }
+}
+
+function goBackToTopicList() {
+    location.replace(getBarURL());
 }
 
 function getTopicLabels(labels) {
@@ -174,10 +198,10 @@ function updateMetadataTopics() {
     $Q("#topic_pages").style.display = (gTopicsData.hasPreviousPage || gTopicsData.hasNextPage) ? "block" : "none";
     $A(".member_num").forEach(item => item.textContent = gTopicsData.starCount);
 
-    $A(".bar_name_text").forEach(item => item.textContent = BAR_NAME);
-    $A(".bar_name_input").forEach(item => item.value = BAR_NAME);
+    $A(".bar_name_text").forEach(item => item.textContent = getBarName());
+    $A(".bar_name_input").forEach(item => item.value = getBarName());
     $A(".member_name").forEach(item => item.textContent = MEMBER_NAME);
-    document.title = BAR_NAME + "\u5427_\u8D34\u5427";
+    document.title = getBarName() + "\u5427_\u8D34\u5427";
 }
 
 function updateMetadataUser() {
@@ -257,6 +281,20 @@ function loginUsingToken(token) {
     });
 }
 
+function getRepoReference() {
+    const params = parseSearchParams();
+
+    // repository
+    if(params.kw) {
+        let group = params.kw.toString().split("/");
+        if(group.length == 2) {
+            gRepo.owner = group[0];
+            gRepo.name = group[1];
+            gRepo.bar = params.kw;
+        }
+    }
+}
+
 function processAllTopics(res) {
     if(!res || res.errors || !res.data) {
         console.log("error");
@@ -265,10 +303,21 @@ function processAllTopics(res) {
     let data = res.data.repository.issues;
     gTopicsData.topicCount = data.totalCount;
 
+    // if it cannot retrieve the user
+    const ANONYMOUS_USER = {
+        login: ANONYMOUS,
+        url: ANONYMOUS_URL
+    };
+
     // Estimate the total post count using linear regression
     gTopicsData.postCount = Math.ceil(data.nodes.map(node => node.comments.totalCount+1).reduce((t,a) => t+a, 0) / data.nodes.length * data.totalCount);
     if(!isFinite(gTopicsData.postCount)) {
         gTopicsData.postCount = 0;
+    }
+
+    // requested for a repo ID
+    if(res.data.repository.id) {
+        gRepo.id = res.data.repository.id;
     }
 
     gTopicsData.maxPages = Math.ceil(data.totalCount / gTopicsConsts.pageTopicCount);
@@ -282,11 +331,11 @@ function processAllTopics(res) {
         title: node.title,
         number: node.number,
         labels: node.labels,
-        author: node.author.login,
-        authorURL: node.author.url,
+        author: !node.author ? ANONYMOUS : node.author.login,
+        authorURL: !node.author ? ANONYMOUS_URL : node.author.url,
         lastReplyTime: node.comments.nodes.length != 0 ? node.comments.nodes[0].publishedAt : node.createdAt,
-        lastReplyUser: node.comments.nodes.length != 0 ? node.comments.nodes[0].author.login : node.author.login,
-        lastReplyUserURL: node.comments.nodes.length != 0 ? node.comments.nodes[0].author.url : node.author.url
+        lastReplyUser: ((node.comments.nodes.length != 0 ? node.comments.nodes[0].author : node.author) || ANONYMOUS_USER).login,
+        lastReplyUserURL: ((node.comments.nodes.length != 0 ? node.comments.nodes[0].author : node.author) || ANONYMOUS_USER).url
     }))
     updateMetadataTopics();
 
@@ -321,7 +370,8 @@ function getAndRenderTopicList(currentPage, cursor) {
     const pageTopicCount = gTopicsConsts.pageTopicCount;
     const qlGetAllIssues = `
         query FindIssues {
-          repository(owner:"${REPO_OWNER}", name:"${REPO_NAME}") {
+          repository(owner:"${gRepo.owner}", name:"${gRepo.name}") {
+            id,
             forkCount,
             stargazers {
               totalCount
@@ -393,7 +443,7 @@ function submitNewTopic(title, content) {
         "input": {
             "title" : title,
             "body" : content,
-            "repositoryId" : REPO_ID
+            "repositoryId" : gRepo.id
         }
     };
 
@@ -436,10 +486,33 @@ function attachNewTopicEvent() {
     })
 }
 
+function attachSearchEvent() {
+    const searchEvent = evt => {
+        const searchString = $Q(".tb_header_search_input").value.toString().trim();
+        let group = searchString.toString().split("/");
+        if(group.length == 2) {
+            gRepo.owner = group[0];
+            gRepo.name = group[1];
+            gRepo.bar = searchString;
+            goBackToTopicList();
+        }
+    };
+    $Q("#search_submit").addEventListener("click", searchEvent);
+    $Q(".tb_header_search_input").addEventListener("keydown", evt => {
+        if(evt.key == "Enter") {
+            searchEvent(evt);
+            evt.stopPropagation();
+            evt.preventDefault();
+        }
+    });
+}
+
 function init() {
     attachPaginationEvent();
     attachNewTopicEvent();
+    attachSearchEvent();
     loadUserData().then(res => {
+        getRepoReference();
         getAndRenderTopicList(0, "");
         updateMetadataUser();
         updateScore();

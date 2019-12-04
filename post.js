@@ -2,7 +2,7 @@
 * @Author: Kotri Lv.199
 * @Date:   2019-12-02 15:34:03
 * @Last Modified by:   Kotri Lv.192
-* @Last Modified time: 2019-12-03 20:06:34
+* @Last Modified time: 2019-12-04 23:02:39
 *
 * Base Code for Serverless Old Tieba
 */
@@ -142,10 +142,10 @@ function updateMetadataPosts() {
     $A(".post_prev_page").forEach(item => item.style.display = gPostsData.hasPreviousPage ? "inline" : "none");
     $A(".l_pager").forEach(item => item.style.display = (gPostsData.hasPreviousPage || gPostsData.hasNextPage) ? "inline" : "none");
 
-    $A(".bar_name_text").forEach(item => item.textContent = BAR_NAME);
-    $A(".bar_name_input").forEach(item => item.value = BAR_NAME);
+    $A(".bar_name_text").forEach(item => item.textContent = getBarName());
+    $A(".bar_name_input").forEach(item => item.value = getBarName());
     $A(".member_name").forEach(item => item.textContent = MEMBER_NAME);
-    document.title = gPostsData.title + "_" + BAR_NAME + "\u5427_\u8D34\u5427";
+    document.title = gPostsData.title + "_" + getBarName() + "\u5427_\u8D34\u5427";
 }
 
 function updateMetadataUser() {
@@ -158,7 +158,7 @@ function updateMetadataUser() {
         $A(".user_ava").forEach(item => item.src = gUserData.avatarUrl);
     }
 
-    $A(".bar_url").forEach(item => item.href = BAR_FILE);
+    $A(".bar_url").forEach(item => item.href = getBarURL());
 }
 
 function showPostsAdBar() {
@@ -211,6 +211,11 @@ function processAllPosts(res) {
     let pageInfo = data.comments.pageInfo;
     let comments = data.comments.nodes;
 
+    // requested for a repo ID
+    if(res.data.repository.id) {
+        gRepo.id = res.data.repository.id;
+    }
+
     gPostsData.id = data.id;
     gPostsData.title = data.title;
     gPostsData.maxPages = Math.ceil((1 + data.comments.totalCount) / gPostsConsts.pagePostCount);
@@ -225,8 +230,8 @@ function processAllPosts(res) {
         title: REPLY_PREFIX + data.title,
         order: i + (gPostsData.page == 0 ? 1 : 0) + gPostsData.page * gPostsConsts.pagePostCount,
         content: node.bodyHTML,
-        author: node.author.login,
-        authorURL: node.author.url,
+        author: !node.author ? ANONYMOUS : node.author.login,
+        authorURL: !node.author ? ANONYMOUS_URL : node.author.url,
         createdAt: node.createdAt,
         url: node.url,
         id: node.id
@@ -237,8 +242,8 @@ function processAllPosts(res) {
             title: data.title,
             order: 0,
             content: data.bodyHTML,
-            author: data.author.login,
-            authorURL: data.author.url,
+            author: !data.author ? ANONYMOUS : data.author.login,
+            authorURL: !data.author ? ANONYMOUS_URL : data.author.url,
             createdAt: data.createdAt,
             url: data.url,
             id: data.id
@@ -263,13 +268,37 @@ function attachPaginationEvent() {
     }));
 }
 
-function getTopicNumber() {
+function getTopicReference() {
     const params = parseSearchParams();
     if(!params.kz) {
-        location.replace(BAR_FILE);
+        location.replace(getBarURL());
         return;
     }
     gPostsData.topicNumber = params.kz;
+
+    // repository
+    if(params.kw) {
+        let group = params.kw.toString().split("/");
+        if(group.length == 2) {
+            gRepo.owner = group[0];
+            gRepo.name = group[1];
+            gRepo.bar = params.kw;
+        }
+    }
+}
+
+function getBarURL() {
+    if(gRepo.owner == DEFAULT_REPO_OWNER && gRepo.name == DEFAULT_REPO_NAME) {
+        return BAR_FILE;
+    }
+    else {
+        let kw = encodeURIComponent(gRepo.owner + "/" + gRepo.name);
+        return BAR_FILE + `?kw=${kw}`;
+    }
+}
+
+function getBarName() {
+    return gRepo.bar;
 }
 
 function sanitize(str) {
@@ -283,7 +312,8 @@ function getAndRenderPostList(currentPage, cursor) {
     const pagePostCount = gPostsConsts.pagePostCount + (currentPage == 0 ? -1 : 0);
     const qlGetAllIssueComments = `
         query FindIssueComments {
-          repository(owner:"${REPO_OWNER}", name:"${REPO_NAME}") {
+          repository(owner:"${gRepo.owner}", name:"${gRepo.name}") {
+            id,
             forkCount,
             stargazers {
               totalCount
@@ -430,7 +460,7 @@ function submitDeleteComment(id) {
 }
 
 function goBackToTopicList() {
-    location.replace(BAR_FILE);
+    location.replace(getBarURL());
 }
 
 function evtDeletePost(commentID, floorCount) {
@@ -549,16 +579,38 @@ function evtReplyTo(flo, author) {
     }
 }
 
+function attachSearchEvent() {
+    const searchEvent = evt => {
+        const searchString = $Q(".tb_header_search_input").value.toString().trim();
+        let group = searchString.toString().split("/");
+        if(group.length == 2) {
+            gRepo.owner = group[0];
+            gRepo.name = group[1];
+            gRepo.bar = searchString;
+            goBackToTopicList();
+        }
+    };
+    $Q("#search_submit").addEventListener("click", searchEvent);
+    $Q(".tb_header_search_input").addEventListener("keydown", evt => {
+        if(evt.key == "Enter") {
+            searchEvent(evt);
+            evt.stopPropagation();
+            evt.preventDefault();
+        }
+    });
+}
+
 function init() {
     showPostsAdBar();
     loadUserData().then(res => {
-        getTopicNumber();
+        getTopicReference();
         getAndRenderPostList(0, "");
 
         attachPaginationEvent();
         attachNewReplyEvent();
         attachDigestEvent();
         attachDeleteIssueEvent();
+        attachSearchEvent();
 
         updateMetadataUser();
         updateScore();
